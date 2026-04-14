@@ -14,7 +14,7 @@ public:
     bool isCorrect();
     bool solvePuzzle(int i,int j,std::vector<bool>& visited,int visited_cout);
     int get_size(int i, int j, int value, std::vector<bool>& visited, bool zero);
-    const bool check_indices(int i, int j);
+    bool check_indices(int i, int j) const;
 };
 Grid initGrid();
 #endif

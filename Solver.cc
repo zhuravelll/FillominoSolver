@@ -1,11 +1,14 @@
 #include "Solver.h"
+
 const int dx[4] = {0, 0, 1, -1};
 const int dy[4] = {1, -1, 0, 0};
-const bool Grid::check_indices(int i, int j) {
-	return i >= 0 && i < height && j >= 0 && j < width;
+
+bool Grid::check_indices(int i, int j) const {
+    return i >= 0 && i < height && j >= 0 && j < width;
 }
+
 int Grid::get_size(int i, int j, int value, std::vector<bool>& visited, bool zero) {
-    visited[i * width + j] = true; // Для плоского вектора
+    visited[i * width + j] = true; 
     int res = 1;
 
     for (int k = 0; k < 4; k++) {
@@ -15,9 +18,7 @@ int Grid::get_size(int i, int j, int value, std::vector<bool>& visited, bool zer
         if (check_indices(x, y)) {
             int idx = x * width + y;
             if (!visited[idx]) {
-                int current_val = get(x, y); // Твій метод доступу
-                
-                // Умова: або значення збігається, або ми шукаємо порожні (zero)
+                int current_val = get(x, y); 
                 if (current_val == value || (zero && current_val == 0)) {
                     res += get_size(x, y, value, visited, zero);
                 }
@@ -36,8 +37,6 @@ bool Grid::isCorrect() {
 
             if (!visited[idx]) {
                 int val = get(i, j); 
-                
-                // Тепер типи збігаються (вектор іде у вектор)
                 if (get_size(i, j, val, visited, false) != val)
                     return false;
             }
