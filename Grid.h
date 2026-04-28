@@ -1,20 +1,36 @@
 #ifndef GRID_H
 #define GRID_H
-
 #include <vector>
 
 class Grid {
-    std::vector<int> cells; // Плоский вектор для Cache Locality
-    int width, height;
 public:
+    std::vector<int> cells;
+    int width, height;
+    int maxVal;
     Grid(int w, int h);
-    int get(int row, int col) const;
     void set(int row, int col, int val);
     void show();
-    bool isCorrect();
-    bool solvePuzzle(int i,int j,std::vector<bool>& visited,int visited_cout);
-    int get_size(int i, int j, int value, std::vector<bool>& visited, bool zero);
-    bool check_indices(int i, int j) const;
+    bool check_indices(int r, int c) const;
+    bool solve();
+
+private:
+    std::vector<int> vis_stamp;
+    int current_stamp;
+
+    std::vector<int> vision_count;
+    void update_vision(int idx, int signal);
+
+    int adj[121][4];
+    int adj_sz[121];
+
+    int vision_adj[121][50];
+    int vision_sz[121];
+
+    int add_smart_neighbors(int idx, std::vector<int>& order, std::vector<bool>& bfs_visited);
+    bool main_Solver(std::vector<int>& order, int depth, std::vector<bool>& bfs_visited);
+    int get_size(int idx, int value, bool count_zeros);
 };
-Grid initGrid();
+
+Grid initGrid(int type);
+
 #endif
