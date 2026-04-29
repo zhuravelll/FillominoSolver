@@ -3,6 +3,7 @@
     #include <iomanip>
     #include <windows.h>
     #include <iostream>
+    #include <limits>
     #include "Grid.h"
     void Grid::show() {
         std::cout << "     "; 
@@ -38,8 +39,13 @@
         while(true){
             std::cout<<"Menu:\n1.Solve Fillomino-puzzle(11,11).\n2.Solve Test Fillomino-puzzle(6,6).\n3.Finish program\n";
             int option;
-            std::cin>>option;
-            std::cin.ignore();
+            if (!(std::cin >> option)) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Chose correct option!";
+            continue;
+        }
+        std::cin.ignore();
 
             if (option == 1) {
                 Grid grid = initGrid(1);
