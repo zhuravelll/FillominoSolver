@@ -26,8 +26,8 @@ private:
     int vision_adj[121][50];
     int vision_sz[121];
 
-    int add_smart_neighbors(int idx, std::vector<int>& order, std::vector<bool>& bfs_visited);
-    bool main_Solver(std::vector<int>& order, int depth, std::vector<bool>& bfs_visited);
+    int add_smart_neighbors(int idx, std::vector<int>& order, std::vector<bool>& visited);
+    bool main_Solver(std::vector<int>& order, int depth, std::vector<bool>& visited);
     int get_size(int idx, int value, bool count_zeros);
 };
 

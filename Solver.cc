@@ -41,14 +41,14 @@
         return res;
     }
 
-        int Grid::add_smart_neighbors(int idx, std::vector<int>& order, std::vector<bool>& bfs_visited) {
+        int Grid::add_smart_neighbors(int idx, std::vector<int>& order, std::vector<bool>& visited) {
         struct NCell { int idx, filled; };
         NCell arr[4];
         int cnt = 0;
 
         for (int k = 0; k < adj_sz[idx]; ++k) {
             int nidx = adj[idx][k];
-            if (bfs_visited[nidx] == 0) {
+            if (visited[nidx] == 0) {
                 int f = 0;
                 for (int d = 0; d < adj_sz[nidx]; ++d) {
                     if (cells[adj[nidx][d]] != 0) f++;
@@ -68,13 +68,13 @@
         }
 
         for (int i = 0; i < cnt; ++i) {
-            bfs_visited[arr[i].idx] = 1;
+            visited[arr[i].idx] = 1;
             order.push_back(arr[i].idx);
         }
         return cnt;
     }
     
-    bool Grid::main_Solver(std::vector<int>& order, int pos, std::vector<bool>& bfs_visited) {
+    bool Grid::main_Solver(std::vector<int>& order, int pos, std::vector<bool>& visited) {
         if (pos == (int)order.size()) return true;
 
         int idx = order[pos]; 
@@ -83,17 +83,17 @@
         if (fv != 0) {
             if (get_size(idx, fv, true) < fv) return false;
 
-            int added = add_smart_neighbors(idx, order, bfs_visited);
-            bool result = main_Solver(order, pos + 1, bfs_visited);
+            int added = add_smart_neighbors(idx, order, visited);
+            bool result = main_Solver(order, pos + 1, visited);
 
             for (int i = 0; i < added; ++i) {
-                bfs_visited[order.back()] = 0;
+                visited[order.back()] = 0;
                 order.pop_back();
             }
             return result;
         }
 
-        int added = add_smart_neighbors(idx, order, bfs_visited);
+        int added = add_smart_neighbors(idx, order, visited);
 
         int priority_list[14]; 
         int p_size = 0;
@@ -147,14 +147,14 @@
                 continue; 
             }
 
-            if (main_Solver(order, pos + 1, bfs_visited)) return true;
+            if (main_Solver(order, pos + 1, visited)) return true;
 
             if (v == 1) update_vision(idx, -1);
             cells[idx] = 0;
         }
 
         for (int i = 0; i < added; ++i) {
-            bfs_visited[order.back()] = 0;
+            visited[order.back()] = 0;
             order.pop_back();
         }
 
@@ -226,7 +226,7 @@
     }
 
     
-    std::vector<bool> bfs_visited(height * width, 0);
+    std::vector<bool> visited(height * width, 0);
     std::vector<int> order;
     order.reserve(height * width);
 
@@ -238,11 +238,11 @@
         }
     }
 
-    bfs_visited[best_idx] = 1;
+    visited[best_idx] = 1;
     order.push_back(best_idx);
 
     auto t0 = std::chrono::high_resolution_clock::now();
-    bool result = main_Solver(order, 0, bfs_visited);
+    bool result = main_Solver(order, 0, visited);
     auto t1 = std::chrono::high_resolution_clock::now();
 
     double ms = std::chrono::duration<double, std::milli>(t1 - t0).count();
